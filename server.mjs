@@ -3,6 +3,10 @@ import fileUpload from "express-fileupload";
 import propertiesReader from "properties-reader";
 import path from "path";
 import cors from "cors";
+import morgan  from "morgan";
+import fs from "fs";
+
+app.use(morgan("short"));
 
 const app = express();
 //new way to extract parameters from requests
@@ -84,6 +88,31 @@ app.put("/", function (req, res) {
 
 app.delete("/", function (req, res) {
   res.send("are you sure you want to delete a record");
+});
+
+// Middleware to serve static files from the "public/images" directory
+app.use("/images", express.static(path.join(__dirname, "public/images")));
+
+// Middleware to handle missing images
+app.get("/images/:imageName", (req, res) => {
+  const imageName = req.params.imageName;
+  const imagePath = path.join(__dirname, "public/images", imageName);
+
+  // Check if the image exists
+  fs.access(imagePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      // Image not found
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    // Image exists, serve it
+    res.sendFile(imagePath);
+  });
+});
+
+// Fallback for other non-existing routes
+app.use((req, res) => {
+  res.status(404).json({ error: "Route not found" });
 });
 
 // app.listen(3000, () => {
