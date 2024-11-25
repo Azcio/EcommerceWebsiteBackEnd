@@ -53,12 +53,12 @@ app.get("/collections/:collectionName", async (req, res, next) => {
 app.use(function (req, res, next) {
   console.log("Incoming request: " + req.url);
   next();
-})
+});
 
 //save the new order Info
 app.post("/collections/orderInfo", async (req, res, next) => {
-  try { 
-    console.log("Incoming POST request to orderInfo with data:", req.body); 
+  try {
+    console.log("Incoming POST request to orderInfo with data:", req.body);
     const newOrder = {
       name: req.body.name,
       surname: req.body.surname,
@@ -66,8 +66,7 @@ app.post("/collections/orderInfo", async (req, res, next) => {
       number: req.body.number,
       lessonsBought: req.body.lessonsBought || [],
     };
-    const collection = db.collection("orderInfo"); 
-
+    const collection = db.collection("orderInfo");
 
     const result = await db.collection("orderInfo").insertOne(newOrder);
     console.log("Insert result:", result);
@@ -77,7 +76,7 @@ app.post("/collections/orderInfo", async (req, res, next) => {
     console.error("Error in POST: orderInfo:", error);
     next(error);
   }
-  });
+});
 
 app.put("/", function (req, res) {
   res.send("Ok, lets change an element");
@@ -87,7 +86,10 @@ app.delete("/", function (req, res) {
   res.send("are you sure you want to delete a record");
 });
 
-
-app.listen(3000, () => {
-  console.log("Server listening on http://localhost:3000");
+// app.listen(3000, () => {
+//   console.log("Server listening on http://localhost:3000");
+// });
+const port = process.env.PORT || 3000;
+app.listen(port, function () {
+  console.log("App started on port: " + port);
 });
