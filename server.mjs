@@ -7,21 +7,42 @@ import morgan  from "morgan";
 import fs from "fs";
 
 app.use(morgan("short"));
-
 const app = express();
-//new way to extract parameters from requests
-app.use(express.json());
-
-app.use(cors());
-
+app.use(express.json());//new way to extract parameters from requests
 app.use(fileUpload());
-app.use(express.static("public"));
 
+
+app.use(express.static("public")); //gets static files from the public directory e.g, css, images, js
+app.use(express.static(path.join(__dirname, 'public')));
+
+// app.use(function(req, res, next) {
+//   var filepath = path.join(__dirname, "static", req.url);
+//   fs.stat(filepath, function(err, fileInfo) {
+//     if(err) {
+//       next();
+//       return;
+//     }
+
+//     if(fileInfo.isFile()) {
+//       res.sendFile(filepath);
+//     } else {
+//       next();
+//     }
+// });
+//   });
+
+
+app.use(cors({
+  origin: "https://azcio.github.io",
+  methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
+  credentials: true,
+}));
+ 
 //initalise Property reader
 let propertiesPath = path.resolve("conf/db.properties");
 let properties = propertiesReader(propertiesPath);
-let dbPprefix = properties.get("db.prefix");
 
+let dbPprefix = properties.get("db.prefix");
 let dbUsername = encodeURIComponent(properties.get("db.user"));
 let dbPwd = encodeURIComponent(properties.get("db.pwd"));
 let dbName = properties.get("db.dbName");
@@ -51,9 +72,6 @@ app.get("/collections/:collectionName", async (req, res, next) => {
   }
 });
 
-// Serve static files (CSS, JS, Images) from the "BackEnd" folder.
-// app.use('/static', express.static(path.join(__dirname, 'BackEnd')));
-
 app.use(function (req, res, next) {
   console.log("Incoming request: " + req.url);
   next();
@@ -70,11 +88,9 @@ app.post("/collections/orderInfo", async (req, res, next) => {
       number: req.body.number,
       lessonsBought: req.body.lessonsBought || [],
     };
-    const collection = db.collection("orderInfo");
 
     const result = await db.collection("orderInfo").insertOne(newOrder);
     console.log("Insert result:", result);
-
     res.status(201).json({ insertedId: result.insertedId });
   } catch (error) {
     console.error("Error in POST: orderInfo:", error);
@@ -90,32 +106,7 @@ app.delete("/", function (req, res) {
   res.send("are you sure you want to delete a record");
 });
 
-// Middleware to serve static files from the "public/images" directory
-app.use("/images", express.static(path.join(__dirname, "public/images")));
-
-// Middleware to handle missing images
-app.get("/images/:imageName", (req, res) => {
-  const imageName = req.params.imageName;
-  const imagePath = path.join(__dirname, "public/images", imageName);
-
-  // Check if the image exists
-  fs.access(imagePath, fs.constants.F_OK, (err) => {
-    if (err) {
-      // Image not found
-      return res.status(404).json({ error: "Image not found" });
-    }
-
-    // Image exists, serve it
-    res.sendFile(imagePath);
-  });
-});
-
-// Fallback for other non-existing routes
-app.use((req, res) => {
-  res.status(404).json({ error: "Route not found" });
-});
-
-// app.listen(3000, () => {
+// app.listen(3001, () => {
 //   console.log("Server listening on http://localhost:3000");
 // });
 const port = process.env.PORT || 3000;
