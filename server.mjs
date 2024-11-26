@@ -6,11 +6,11 @@ import cors from "cors";
 import morgan  from "morgan";
 import fs from "fs";
 
-// app.use(morgan("short"));
 const app = express();
+
+app.use(morgan("short"));
 app.use(express.json());//new way to extract parameters from requests
 app.use(fileUpload());
-
 
 app.use(express.static("public")); //gets static files from the public directory e.g, css, images, js
 app.use(express.static(path.join(__dirname, 'public')));
@@ -30,7 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 //     }
 // });
 //   });
-
 
 app.use(cors({
   origin: "https://azcio.github.io/EcommerceWebsiteFrontEnd/",
