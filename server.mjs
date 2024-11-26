@@ -6,7 +6,7 @@ import cors from "cors";
 import morgan  from "morgan";
 import fs from "fs";
 
-app.use(morgan("short"));
+// app.use(morgan("short"));
 const app = express();
 app.use(express.json());//new way to extract parameters from requests
 app.use(fileUpload());
