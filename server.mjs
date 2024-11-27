@@ -73,6 +73,18 @@ app.get("/collections/:collectionName", async (req, res, next) => {
   }
 });
 
+app.get("/collections/:collectionName/:id", async (req, res, next) => {
+  req.collection.findOne(
+    { _id: new ObjectId(req.params.id) },
+    function (err, results) {
+      if (err) {
+        return next(err);
+      }
+      res.send(results);
+    }
+  );
+});
+
 app.use(function (req, res, next) {
   console.log("Incoming request: " + req.url);
   next();
