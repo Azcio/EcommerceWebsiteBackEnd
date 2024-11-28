@@ -12,15 +12,13 @@ app.use(express.json()); //new way to extract parameters from requests
 //gets static files from the public directory e.g, css, images, js
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use(
-//   cors({
-//     origin: ["https://azcio.github.io/EcommerceWebsiteFrontEnd/",
-//       "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com/" ],
-//     methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
-//     credentials: true,
-//   })
-// );
-app.use(cors());
+app.use(
+  cors({
+      origin: ["https://azcio.github.io", "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"],
+    methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
+    credentials: true,
+  })
+);
 
 //initalise Property reader
 let propertiesPath = path.resolve("conf/db.properties");
@@ -100,6 +98,17 @@ app.put("/", function (req, res) {
 
 app.delete("/", function (req, res) {
   res.send("are you sure you want to delete a record");
+});
+
+// General catch-all error handling for invalid routes
+app.use(function (req, res, next) {
+  res.status(404).json({ message: "Endpoint not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Internal Server Error", error: err.message });
 });
 
 const port = process.env.PORT || 8080;
