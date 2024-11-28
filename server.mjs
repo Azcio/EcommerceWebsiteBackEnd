@@ -16,7 +16,7 @@ app.use(fileUpload());
 // app.use(express.static(path.join(__dirname, "public")));
 
 app.use(function (req, res, next) {
-  var filepath = path.join(__dirname, "static", req.url);
+  var filepath = path.join(__dirname, "public", req.url);
   fs.stat(filepath, function (err, fileInfo) {
     if (err) {
       next();
