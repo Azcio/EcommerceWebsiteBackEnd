@@ -11,11 +11,13 @@ app.use(express.json()); //new way to extract parameters from requests
 
 //gets static files from the public directory e.g, css, images, js
 app.use(express.static(path.join(__dirname, "public")));
-
 app.use(
   cors({
-      origin: ["https://azcio.github.io", "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"],
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
+    origin: [
+      "https://azcio.github.io/EcommerceWebsiteFrontEnd",
+      "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
