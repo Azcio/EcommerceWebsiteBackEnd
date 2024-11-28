@@ -28,22 +28,11 @@ app.use(express.static(path.join(__dirname, "public")));
 //     }
 //   });
 // });
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://azcio.github.io");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200); // Handle preflight
-  }
-
-  next();
-});
 
 app.use(
   cors({
-    origin: "https://azcio.github.io/EcommerceWebsiteFrontEnd/",
+    origin: ["https://azcio.github.io/EcommerceWebsiteFrontEnd/",
+      "http://erikcreativecorner.eu-west-2.elasticbeanstalk.com/" ],
     methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
     credentials: true,
   })
