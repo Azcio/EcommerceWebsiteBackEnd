@@ -132,7 +132,7 @@ app.delete("/", function (req, res) {
 // app.listen(3001, () => {
 //   console.log("Server listening on http://localhost:3000");
 // });
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 app.listen(port, function () {
   console.log("App started on port: " + port);
 });
