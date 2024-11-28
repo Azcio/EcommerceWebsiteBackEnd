@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
   cors({
-    origin: "https://azcio.github.io",
+    origin: "https://azcio.github.io/EcommerceWebsiteFrontEnd/",
     methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
     credentials: true,
   })
