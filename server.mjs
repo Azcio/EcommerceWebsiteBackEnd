@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   cors({
     origin: ["https://azcio.github.io/EcommerceWebsiteFrontEnd/",
-      "http://erikcreativecorner.eu-west-2.elasticbeanstalk.com/" ],
+      "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com/" ],
     methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
     credentials: true,
   })
