@@ -1,5 +1,4 @@
 import express from "express";
-import fileUpload from "express-fileupload";
 import propertiesReader from "properties-reader";
 import path from "path";
 import cors from "cors";
@@ -8,32 +7,31 @@ import fs from "fs";
 
 const app = express();
 
-// app.use(morgan("short"));
+app.use(morgan("short"));
 app.use(express.json()); //new way to extract parameters from requests
-app.use(fileUpload());
 
 // app.use(express.static("public")); //gets static files from the public directory e.g, css, images, js
-// app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.use(function (req, res, next) {
-  var filepath = path.join(__dirname, "public", req.url);
-  fs.stat(filepath, function (err, fileInfo) {
-    if (err) {
-      next();
-      return;
-    }
+// app.use(function (req, res, next) {
+//   var filepath = path.join(__dirname, "public", req.url);
+//   fs.stat(filepath, function (err, fileInfo) {
+//     if (err) {
+//       next();
+//       return;
+//     }
 
-    if (fileInfo.isFile()) {
-      res.sendFile(filepath);
-    } else {
-      next();
-    }
-  });
-});
+//     if (fileInfo.isFile()) {
+//       res.sendFile(filepath);
+//     } else {
+//       next();
+//     }
+//   });
+// });
 
 app.use(
   cors({
-    origin: "https://azcio.github.io/EcommerceWebsiteFrontEnd/",
+    origin: "https://azcio.github.io",
     methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
     credentials: true,
   })
