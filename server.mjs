@@ -3,40 +3,24 @@ import propertiesReader from "properties-reader";
 import path from "path";
 import cors from "cors";
 import morgan from "morgan";
-import fs from "fs";
 
 const app = express();
 
 app.use(morgan("short"));
 app.use(express.json()); //new way to extract parameters from requests
 
-// app.use(express.static("public")); //gets static files from the public directory e.g, css, images, js
+//gets static files from the public directory e.g, css, images, js
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use(function (req, res, next) {
-//   var filepath = path.join(__dirname, "public", req.url);
-//   fs.stat(filepath, function (err, fileInfo) {
-//     if (err) {
-//       next();
-//       return;
-//     }
-
-//     if (fileInfo.isFile()) {
-//       res.sendFile(filepath);
-//     } else {
-//       next();
-//     }
-//   });
-// });
-
-app.use(
-  cors({
-    origin: ["https://azcio.github.io/EcommerceWebsiteFrontEnd/",
-      "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com/" ],
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: ["https://azcio.github.io/EcommerceWebsiteFrontEnd/",
+//       "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com/" ],
+//     methods: ["GET", "POST", "PUT", "DELETE"], // Allow necessary HTTP methods
+//     credentials: true,
+//   })
+// );
+app.use(cors());
 
 //initalise Property reader
 let propertiesPath = path.resolve("conf/db.properties");
@@ -118,9 +102,6 @@ app.delete("/", function (req, res) {
   res.send("are you sure you want to delete a record");
 });
 
-// app.listen(3001, () => {
-//   console.log("Server listening on http://localhost:3000");
-// });
 const port = process.env.PORT || 8080;
 app.listen(port, function () {
   console.log("App started on port: " + port);
