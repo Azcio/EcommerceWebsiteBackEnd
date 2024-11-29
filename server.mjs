@@ -10,7 +10,7 @@ const app = express();
 //gets static files from the public directory e.g, css, images, js
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "images")));
 
 app.use(morgan("short"));
 app.use(express.json()); //new way to extract parameters from requests
@@ -33,6 +33,14 @@ import { MongoClient, ServerApiVersion, ObjectId } from "mongodb";
 const client = new MongoClient(uri, { serverApi: ServerApiVersion.v1 });
 let db = client.db(dbName);
 
+app.use(
+  cors({
+    origin: "https://azcio.github.io", // Allow all paths under this domain
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
 //get Mongo collection name
 app.param("collectionName", function (req, res, next, collectionName) {
   req.collection = db.collection(collectionName);
@@ -41,38 +49,32 @@ app.param("collectionName", function (req, res, next, collectionName) {
 
 // app.use(
 //   cors({
-//     origin:
-//       "https://azcio.github.io/EcommerceWebsiteFrontEnd",
+//     origin: function (origin, callback) {
+//       const allowedOrigins = [
+//         "https://azcio.github.io",
+//         // "http://127.0.0.1:3001", "http://127.0.0.1:3000",
+//         "https://azcio.github.io/EcommerceWebsiteFrontEnd"
+//       ];
+//       if (allowedOrigins.includes(origin) || !origin) {
+//         callback(null, true); // Allow the request
+//       } else {
+//         callback(new Error("Not allowed by CORS")); // Reject request if not allowed
+//       }
+//     },
 //     methods: ["GET", "POST", "PUT", "DELETE"],
 //     credentials: true,
 //   })
 // );
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow both 'https://azcio.github.io' and 'https://azcio.github.io/EcommerceWebsiteFrontEnd'
-      const allowedOrigins = [
-        "https://azcio.github.io",                // Root domain
-        "https://azcio.github.io/EcommerceWebsiteFrontEnd" // Specific path
-      ];
-      if (allowedOrigins.includes(origin) || !origin) {
-        callback(null, true); // Allow the request
-      } else {
-        callback(new Error("Not allowed by CORS")); // Reject request if not allowed
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
 
 //getting and reading collections
 app.get("/collections/:collectionName", async (req, res, next) => {
+  console.log("Fetching collection:", req.params.collectionName);
   try {
     const results = await req.collection.find({}).toArray();
     res.json(results);
   } catch (error) {
+    console.error("Error fetching collection:", error);
     next(error);
   }
 });
@@ -128,7 +130,7 @@ app.use(function (req, res, next) {
   res.status(404).json({ message: "Endpoint not found" });
 });
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port, function () {
   console.log("App has started on port: " + port);
 });
