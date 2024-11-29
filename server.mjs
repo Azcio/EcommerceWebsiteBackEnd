@@ -39,10 +39,29 @@ app.param("collectionName", function (req, res, next, collectionName) {
   return next();
 });
 
+// app.use(
+//   cors({
+//     origin:
+//       "https://azcio.github.io/EcommerceWebsiteFrontEnd",
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin:
-      "https://azcio.github.io/EcommerceWebsiteFrontEnd",
+    origin: function (origin, callback) {
+      // Allow both 'https://azcio.github.io' and 'https://azcio.github.io/EcommerceWebsiteFrontEnd'
+      const allowedOrigins = [
+        "https://azcio.github.io",                // Root domain
+        "https://azcio.github.io/EcommerceWebsiteFrontEnd" // Specific path
+      ];
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true); // Allow the request
+      } else {
+        callback(new Error("Not allowed by CORS")); // Reject request if not allowed
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
