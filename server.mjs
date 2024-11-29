@@ -13,10 +13,11 @@ app.use(express.json()); //new way to extract parameters from requests
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   cors({
-    origin: [
-      "https://azcio.github.io/EcommerceWebsiteFrontEnd",
-      "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
-    ],
+    // origin: [
+    //   "https://azcio.github.io/EcommerceWebsiteFrontEnd",
+    //   "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
+    // ],
+    origin: "*",  // Allow all origins for testing
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -111,6 +112,13 @@ app.use(function (req, res, next) {
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: "Internal Server Error", error: err.message });
+});
+
+app.use((req, res, next) => {
+  res.on('finish', () => {
+    console.log('Response Headers:', res.getHeaders());
+  });
+  next();
 });
 
 const port = process.env.PORT || 8080;
