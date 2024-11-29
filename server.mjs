@@ -1,16 +1,19 @@
 import express from "express";
 import propertiesReader from "properties-reader";
 import path from "path";
+import { fileURLToPath } from "url";
 import cors from "cors";
 import morgan from "morgan";
 
 const app = express();
 
+//gets static files from the public directory e.g, css, images, js
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use(morgan("short"));
 app.use(express.json()); //new way to extract parameters from requests
-
-//gets static files from the public directory e.g, css, images, js
-app.use(express.static(path.join(__dirname, "public")));
 
 //initalise Property reader
 let propertiesPath = path.resolve("conf/db.properties");
@@ -40,7 +43,7 @@ app.use(
   cors({
     origin: [
       "https://azcio.github.io/EcommerceWebsiteFrontEnd",
-      "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
+      // "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
