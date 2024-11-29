@@ -41,10 +41,8 @@ app.param("collectionName", function (req, res, next, collectionName) {
 
 app.use(
   cors({
-    origin: [
+    origin:
       "https://azcio.github.io/EcommerceWebsiteFrontEnd",
-      "https://ecommercewebsitebackend-119l.onrender.com"
-    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
