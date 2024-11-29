@@ -11,17 +11,6 @@ app.use(express.json()); //new way to extract parameters from requests
 
 //gets static files from the public directory e.g, css, images, js
 app.use(express.static(path.join(__dirname, "public")));
-app.use(
-  cors({
-    // origin: [
-    //   "https://azcio.github.io/EcommerceWebsiteFrontEnd",
-    //   "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
-    // ],
-    origin: "*",  // Allow all origins for testing
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
 
 //initalise Property reader
 let propertiesPath = path.resolve("conf/db.properties");
@@ -46,6 +35,17 @@ app.param("collectionName", function (req, res, next, collectionName) {
   req.collection = db.collection(collectionName);
   return next();
 });
+
+app.use(
+  cors({
+    origin: [
+      "https://azcio.github.io/EcommerceWebsiteFrontEnd",
+      "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 
 //getting and reading collections
 app.get("/collections/:collectionName", async (req, res, next) => {
@@ -106,19 +106,6 @@ app.delete("/", function (req, res) {
 // General catch-all error handling for invalid routes
 app.use(function (req, res, next) {
   res.status(404).json({ message: "Endpoint not found" });
-});
-
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ message: "Internal Server Error", error: err.message });
-});
-
-app.use((req, res, next) => {
-  res.on('finish', () => {
-    console.log('Response Headers:', res.getHeaders());
-  });
-  next();
 });
 
 const port = process.env.PORT || 8080;
