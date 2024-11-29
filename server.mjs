@@ -43,7 +43,7 @@ app.use(
   cors({
     origin: [
       "https://azcio.github.io/EcommerceWebsiteFrontEnd",
-      // "https://erikcreativecorner.eu-west-2.elasticbeanstalk.com"
+      "https://ecommercewebsitebackend-119l.onrender.com"
     ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
