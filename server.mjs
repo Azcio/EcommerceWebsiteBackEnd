@@ -10,7 +10,9 @@ const app = express();
 //gets static files from the public directory e.g, css, images, js
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, "images")));
+// app.use(express.static(path.join(__dirname, "images")));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 
 app.use(morgan("short"));
 app.use(express.json()); //new way to extract parameters from requests
@@ -46,26 +48,6 @@ app.param("collectionName", function (req, res, next, collectionName) {
   req.collection = db.collection(collectionName);
   return next();
 });
-
-// app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       const allowedOrigins = [
-//         "https://azcio.github.io",
-//         // "http://127.0.0.1:3001", "http://127.0.0.1:3000",
-//         "https://azcio.github.io/EcommerceWebsiteFrontEnd"
-//       ];
-//       if (allowedOrigins.includes(origin) || !origin) {
-//         callback(null, true); // Allow the request
-//       } else {
-//         callback(new Error("Not allowed by CORS")); // Reject request if not allowed
-//       }
-//     },
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     credentials: true,
-//   })
-// );
-
 
 //getting and reading collections
 app.get("/collections/:collectionName", async (req, res, next) => {
