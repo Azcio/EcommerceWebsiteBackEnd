@@ -1,12 +1,16 @@
 import express from "express";
 import propertiesReader from "properties-reader";
 import path from "path";
+import { fileURLToPath } from "url";
 import cors from "cors";
 import morgan from "morgan";
 
 const app = express();
 
 //gets static files from the public directory e.g, css, images, js
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// app.use(express.static(path.join(__dirname, "images")));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
@@ -33,7 +37,7 @@ let db = client.db(dbName);
 
 app.use(
   cors({
-    origin: "https://azcio.github.io", // Allow all paths under this domain
+    origin: "https://azcio.github.io", // Allow path to my frontend/pages
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -57,7 +61,6 @@ app.get("/collections/:collectionName", async (req, res, next) => {
   }
 });
 
-//getting and reading specific data collections by id
 app.get("/collections/:collectionName/:id", async (req, res, next) => {
   req.collection.findOne(
     { _id: new ObjectId(req.params.id) },
@@ -104,8 +107,14 @@ app.delete("/", function (req, res) {
   res.send("are you sure you want to delete a record");
 });
 
-app.use(function (req, res, next) {
-  res.status(404).json({ message: "call images images/DramaIcon.png ,collections with collections/products or collections/orderInfo, call ID with collections/products/_id" });
+app.get("/", (req, res) => {
+  res.send("Call collections with collections/products or collections/orderInfo");
+});
+app.get("/", (req, res) => {
+  res.send("Call images from static file with images/webLogo.png");
+});
+app.get("/", (req, res) => {
+  res.send("Call specific data with collections/products/_id");
 });
 
 const port = process.env.PORT || 3000;
