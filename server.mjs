@@ -1,16 +1,12 @@
 import express from "express";
 import propertiesReader from "properties-reader";
 import path from "path";
-import { fileURLToPath } from "url";
 import cors from "cors";
 import morgan from "morgan";
 
 const app = express();
 
 //gets static files from the public directory e.g, css, images, js
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-// app.use(express.static(path.join(__dirname, "images")));
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 
@@ -61,6 +57,7 @@ app.get("/collections/:collectionName", async (req, res, next) => {
   }
 });
 
+//getting and reading specific data collections by id
 app.get("/collections/:collectionName/:id", async (req, res, next) => {
   req.collection.findOne(
     { _id: new ObjectId(req.params.id) },
@@ -107,9 +104,8 @@ app.delete("/", function (req, res) {
   res.send("are you sure you want to delete a record");
 });
 
-// General catch-all error handling for invalid routes
 app.use(function (req, res, next) {
-  res.status(404).json({ message: "Endpoint not found" });
+  res.status(404).json({ message: "call images images/DramaIcon.png ,collections with collections/products or collections/orderInfo, call ID with collections/products/_id" });
 });
 
 const port = process.env.PORT || 3000;
