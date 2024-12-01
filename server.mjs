@@ -108,13 +108,9 @@ app.delete("/", function (req, res) {
 });
 
 app.get("/", (req, res) => {
-  res.send("Call collections with collections/products or collections/orderInfo");
-});
-app.get("/", (req, res) => {
-  res.send("Call images from static file with images/webLogo.png");
-});
-app.get("/", (req, res) => {
-  res.send("Call specific data with collections/products/_id");
+  res.send("Call collections with collections/products or collections/orderInfo"
+    + "Call images from static file with images/webLogo.png"
+  + "Call specific data with collections/products/_id");
 });
 
 const port = process.env.PORT || 3000;
